@@ -1,0 +1,50 @@
+--- ../../src/common/net/minecraft/src/BlockFlowing.java	2012-11-24 06:09:22.000000000 -0600
++++ src/common/net/minecraft/src/BlockFlowing.java	2012-12-05 11:59:34.000000000 -0600
+@@ -87,16 +87,44 @@
+                 }
+             }
+ 
+-            if (this.numAdjacentSources >= 2 && this.blockMaterial == Material.water)
++            if (this.blockMaterial == Material.water)
+             {
++                boolean acceptable_below = false;
+                 if (par1World.getBlockMaterial(par2, par3 - 1, par4).isSolid())
+                 {
+-                    var10 = 0;
++                    acceptable_below = true;
++                }
++                else if (par1World.getBlockMaterial(par2, par3 - 1, par4) == this.blockMaterial && par1World.getBlockMetadata(par2, par3 - 1, par4) == 0)
++                {
++                    acceptable_below = true;
+                 }
+-                else if (par1World.getBlockMaterial(par2, par3 - 1, par4) == this.blockMaterial && par1World.getBlockMetadata(par2, par3, par4) == 0)
++
++                if (this.numAdjacentSources >= 2 && acceptable_below)
+                 {
+                     var10 = 0;
+                 }
++                else if (acceptable_below && par1World.getBlockMaterial(par2, par3 + 1, par4) == this.blockMaterial && par1World.getBlockMetadata(par2, par3 + 1, par4) == 0)
++                {
++                    int adjacent_sources_above = 0;
++                    if (par1World.getBlockMaterial(par2 - 1, par3 + 1, par4) == this.blockMaterial && par1World.getBlockMetadata(par2 - 1, par3 + 1, par4) == 0) {
++                        adjacent_sources_above++;
++                    }
++                    if (par1World.getBlockMaterial(par2 + 1, par3 + 1, par4) == this.blockMaterial && par1World.getBlockMetadata(par2 + 1, par3 + 1, par4) == 0) {
++                        adjacent_sources_above++;
++                    }
++                    if (par1World.getBlockMaterial(par2, par3 + 1, par4 - 1) == this.blockMaterial && par1World.getBlockMetadata(par2, par3 + 1, par4 - 1) == 0) {
++                        adjacent_sources_above++;
++                    }
++
++                    if (par1World.getBlockMaterial(par2, par3 + 1, par4 + 1) == this.blockMaterial && par1World.getBlockMetadata(par2, par3 + 1, par4 + 1) == 0) {
++                        adjacent_sources_above++;
++                    }
++
++                    if (adjacent_sources_above >= 2)
++                    {
++                        var10 = 0;
++                    }
++                }
+             }
+ 
+             if (this.blockMaterial == Material.lava && var6 < 8 && var10 < 8 && var10 > var6 && par5Random.nextInt(4) != 0)
